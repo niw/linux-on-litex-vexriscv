@@ -464,6 +464,7 @@ class OrangeCrab(Board):
             "usb_acm",
             # Buses
             "i2c",
+            "spi",
             # Storage
             "sdcard",
         })
@@ -924,8 +925,9 @@ def main():
             board.platform.add_extension(_sdcard_pmod_io)
 
         if board_name in ["orangecrab"]:
-            from litex_boards.platforms.gsd_orangecrab import feather_i2c
+            from litex_boards.platforms.gsd_orangecrab import feather_i2c, feather_spi
             board.platform.add_extension(feather_i2c)
+            board.platform.add_extension(feather_spi)
 
         if "mmcm" in board.soc_capabilities:
             soc.add_mmcm(2)
