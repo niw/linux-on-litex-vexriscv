@@ -462,6 +462,9 @@ class OrangeCrab(Board):
         Board.__init__(self, gsd_orangecrab.BaseSoC, soc_capabilities={
             # Communication
             "usb_acm",
+            # This is to add GPIO interrupt.
+            # See <https://github.com/niw/litex-boards/tree/add_enc28j60_to_orange_crab> as well.
+            "switches",
             # Buses
             "i2c",
             "spi",
@@ -839,7 +842,7 @@ def main():
     parser.add_argument("--local-ip",       default="192.168.1.50",      help="Local IP address.")
     parser.add_argument("--remote-ip",      default="192.168.1.100",     help="Remote IP address of TFTP server.")
     parser.add_argument("--spi-data-width", default=8,   type=int,       help="SPI data width (max bits per xfer).")
-    parser.add_argument("--spi-clk-freq",   default=1e6, type=int,       help="SPI clock frequency.")
+    parser.add_argument("--spi-clk-freq",   default=8e6, type=int,       help="SPI clock frequency.")
     parser.add_argument("--fdtoverlays",    default="",                  help="Device Tree Overlays to apply.")
     VexRiscvSMP.args_fill(parser)
     args = parser.parse_args()
