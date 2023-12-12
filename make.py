@@ -469,7 +469,7 @@ class OrangeCrab(Board):
             "i2c",
             "spi",
             # Storage
-            "sdcard",
+            "spisdcard",
         })
 
 # Butterstick support ------------------------------------------------------------------------------

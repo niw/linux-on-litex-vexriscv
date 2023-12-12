@@ -73,14 +73,6 @@
 
         };
 
-        vreg_mmc: vreg_mmc {
-                compatible = "regulator-fixed";
-                regulator-name = "vreg_mmc";
-            regulator-min-microvolt = <3300000>;
-            regulator-max-microvolt = <3300000>;
-            regulator-always-on;
-        };
-
         soc {
             #address-cells = <1>;
             #size-cells    = <1>;
@@ -112,19 +104,25 @@
                 status = "okay";
             };
 
-            mmc0: mmc@f0005800 {
-                compatible = "litex,mmc";
-                reg = <0xf0005800 0x100>,
-                      <0xf0004000 0x100>,
-                      <0xf0003800 0x100>,
-                      <0xf0005000 0x100>,
-                      <0xf0004800 0x100>;
-                reg-names = "phy", "core", "reader", "writer", "irq";
-                clocks = <&sys_clk>;
-                vmmc-supply = <&vreg_mmc>;
-                bus-width = <0x04>;
-                interrupts = <3>;
+            litespisdcard0: spi@f0004800 {
+                compatible = "litex,litespi";
+                reg = <0xf0004800 0x100>;
                 status = "okay";
+
+                litespi,max-bpw = <8>;
+                litespi,sck-frequency = <1500000>;
+                litespi,num-cs = <1>;
+
+                #address-cells = <1>;
+                #size-cells    = <0>;
+
+                mmc-slot@0 {
+                    compatible = "mmc-spi-slot";
+                    reg = <0>;
+                    voltage-ranges = <3300 3300>;
+                    spi-max-frequency = <1500000>;
+                    status = "okay";
+                    };
             };
 
             leds: gpio@f0003000 {
@@ -136,21 +134,21 @@
                 status = "disabled";
             };
 
-            switches: gpio@f0007000 {
+            switches: gpio@f0005000 {
                 compatible = "litex,gpio";
-                reg = <0xf0007000 0x4>;
+                reg = <0xf0005000 0x4>;
                 gpio-controller;
                 #gpio-cells = <2>;
                 litex,direction = "in";
-                interrupts = <4>;
+                interrupts = <3>;
                 status = "disabled";
                 interrupt-controller;
                 #interrupt-cells = <2>;
             };
 
-            litespi0: spi@f0006800 {
+            litespi0: spi@f0004000 {
                 compatible = "litex,litespi";
-                reg = <0xf0006800 0x100>;
+                reg = <0xf0004000 0x100>;
                 status = "okay";
 
                 litespi,max-bpw = <8>;
@@ -183,6 +181,8 @@
         aliases {
 
                 serial0 = &liteuart0;
+
+                sdcard0 = &litespisdcard0;
 
                 spi0 = &litespi0;
 
